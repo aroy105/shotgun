@@ -20,3 +20,14 @@ class Node:
             self.strategy_sum[action] += realization_weight * self.strategy[action]
         
         return self.strategy
+
+    def get_average_strategy(self):
+        avg_strategy = {}
+        normalizing_sum = sum(self.strategy_sum.values())
+        
+        for action in self.strategy_sum:
+            if normalizing_sum > 0:
+                avg_strategy[action] = self.strategy_sum[action] / normalizing_sum
+            else:
+                avg_strategy[action] = 0.5
+        return avg_strategy
