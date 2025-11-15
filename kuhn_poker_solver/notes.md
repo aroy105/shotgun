@@ -43,3 +43,6 @@ The forward pass computes the state probabilities, the backward pass computes th
 
 In the videos and papers I read, I was kind of confused by how beliefs were defined. Formally, the belief at some information set I is a probability distribution over the nodes inside that information set. Because we the player can't distinguish between those nodes (e.g. we as player 2 holding a Q seeing a bet don't know if player 1 is betting for value with a K or bluffing with a J), we assign probabilities to whether we're getting value bet or bluffed. 
 
+Normal Form Regret Matching - keep track of the cumulative gain for each action, and then normalize said gains into strategies. This is done on Normal-Form games (finite players, finite actions, payoff for each player for each choice of actions. Thus, can be expressed with a payoff matrix), where each player simultaneously chooses an action without observing the others' choice. These are 'single-shot'.
+
+Counter Factual Regret Minimization improves on this, by treating each information set as a mini normal-form game, and can thus deal with things like hidden info, sequential decisions, chance events, or past decisions. Regret is local to each information set. 
