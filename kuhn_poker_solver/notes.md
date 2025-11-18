@@ -46,3 +46,7 @@ In the videos and papers I read, I was kind of confused by how beliefs were defi
 Normal Form Regret Matching - keep track of the cumulative gain for each action, and then normalize said gains into strategies. This is done on Normal-Form games (finite players, finite actions, payoff for each player for each choice of actions. Thus, can be expressed with a payoff matrix), where each player simultaneously chooses an action without observing the others' choice. These are 'single-shot'.
 
 Counter Factual Regret Minimization improves on this, by treating each information set as a mini normal-form game, and can thus deal with things like hidden info, sequential decisions, chance events, or past decisions. Regret is local to each information set. 
+
+Still confused about how to work out and solve Kuhn Poker analytically, reference:
+https://openworks.wooster.edu/cgi/viewcontent.cgi?article=8559&context=independentstudy
+
