@@ -13,7 +13,7 @@ enum class Card {
 enum class Action {
     Check,
     Bet,
-    Call, 
+    Call,
     Fold
 };
 
