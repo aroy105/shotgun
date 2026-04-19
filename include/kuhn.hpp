@@ -1,6 +1,16 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
-bool is_terminal(const std::string& history);
-int terminal_utility(const std::string& history, char p1_card, char p2_card);
+#include "types.hpp"
+
+namespace shotgun::kuhn {
+
+bool is_terminal(const State& state);
+std::vector<Action> legal_actions(const State& state);
+State next_state(const State& state, Action action);
+int current_player(const State& state);
+int terminal_utility(const State& state);
+
+}
