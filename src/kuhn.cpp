@@ -1,5 +1,7 @@
 #include "kuhn.hpp"
 
+#include <stdexcept>
+
 namespace shotgun::kuhn {
 
 bool is_terminal(const State& state) {
@@ -76,6 +78,19 @@ namespace {
 
         return -1;
     }
+
+    std::string card_to_string(Card card) {
+        switch(card) {
+            case Card::J:
+                return "J";
+            case Card::Q:
+                return "Q";
+            case Card::K:
+                return "K";
+        }
+
+        return "Unknown";
+    }
 }
 
 int terminal_utility(const State& state) {
@@ -92,6 +107,18 @@ int terminal_utility(const State& state) {
     }
 
     return 0;
+}
+
+std::string infoset_key(const State& state) {
+    if (is_terminal(state)) {
+        throw std::invalid_argument("infoset_key called on terminal state");
+    }
+
+    if (current_player(state) == 0) {
+        return card_to_string(state.p1_card) + "|" + state.history;
+    }
+
+    return card_to_string(state.p2_card) + "|" + state.history;
 }
 
 }

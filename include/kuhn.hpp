@@ -12,5 +12,6 @@ std::vector<Action> legal_actions(const State& state);
 State next_state(const State& state, Action action);
 int current_player(const State& state);
 int terminal_utility(const State& state);
+std::string infoset_key(const State& state);
 
 }
