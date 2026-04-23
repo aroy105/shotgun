@@ -6,13 +6,15 @@
 
 #include "kuhn.hpp"
 
-using shotgun::kuhn::Action;using shotgun::kuhn::Card;
+using shotgun::kuhn::Action;
+using shotgun::kuhn::Card;
 using shotgun::kuhn::State;
 using shotgun::kuhn::current_player;
 using shotgun::kuhn::is_terminal;
 using shotgun::kuhn::legal_actions;
 using shotgun::kuhn::next_state;
 using shotgun::kuhn::terminal_utility;
+using shotgun::kuhn::infoset_key;
 
 static const char* to_string(Card c) {
     switch (c) {
@@ -192,4 +194,11 @@ TEST_CASE("Check-bet-call showdown utility is plus or minus 2") {
     REQUIRE(terminal_utility(State{Card::Q, Card::K, "cbc"}) == -2);
     REQUIRE(terminal_utility(State{Card::Q, Card::J, "cbc"}) == 2);
     REQUIRE(terminal_utility(State{Card::J, Card::Q, "cbc"}) == -2);
+}
+
+TEST_CASE("infoset_key function returns correct value") {
+    REQUIRE(infoset_key(State{Card::K, Card::Q, ""}) == "K|");
+    REQUIRE(infoset_key(State{Card::J, Card::Q, ""}) == "J|");
+    REQUIRE(infoset_key(State{Card::Q, Card::J, "c"}) == "J|c");
+    REQUIRE(infoset_key(State{Card::K, Card::Q, "cb"}) == "K|cb");
 }
