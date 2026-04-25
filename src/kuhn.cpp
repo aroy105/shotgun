@@ -121,4 +121,19 @@ std::string infoset_key(const State& state) {
     return card_to_string(state.p2_card) + "|" + state.history;
 }
 
+std::string action_to_string(Action action) {
+    switch (action) {
+        case Action::Check:
+            return "Check";
+        case Action::Bet:
+            return "Bet";
+        case Action::Call:
+            return "Call";
+        case Action::Fold:
+            return "Fold";
+    }
+
+    return "Unknown";
+}
+
 }

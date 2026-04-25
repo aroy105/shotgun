@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <array>
+#include <iomanip>
 #include <iostream>
 #include <vector>
 
@@ -103,15 +104,25 @@ void CFRTrainer::print_strategies() const {
 
     std::sort(keys.begin(), keys.end());
 
+    std::cout << std::fixed << std::setprecision(4);
+
     for (const std::string& key : keys) {
         const Node& node = node_map_.at(key);
         std::array<double, 2> avg = node.get_average_strategy();
-        std::cout << key
-                 << "-> ["
-                 << avg[0]
-                 << ", "
-                 << avg[1]
-                 << "]\n";
+        std::size_t separator = key.find('|');
+        std::string history = key.substr(separator + 1);
+        State dummy_state{Card::J, Card::Q, history};
+        std::vector<Action> actions = legal_actions(dummy_state);
+        std::cout << key << " -> ";
+
+        for (int i = 0; i < 2; i++) {
+            std::cout << action_to_string(actions[i]) << ": " << avg[i];
+            if (i < 1) {
+                std::cout << ", ";
+            }
+        }
+
+        std::cout << "\n";
     }
 }
 
