@@ -1,5 +1,10 @@
 #include "cfr.hpp"
 
+#include <algorithm>
+#include <array>
+#include <iostream>
+#include <vector>
+
 namespace shotgun::kuhn {
 
 double CFRTrainer::cfr(const State& state, double p1_reach, double p2_reach) {
@@ -86,6 +91,28 @@ void CFRTrainer::train(int iterations) {
                 }
             }
         }
+}
+
+void CFRTrainer::print_strategies() const {
+    std::vector<std::string> keys;
+    keys.reserve(node_map_.size());
+
+    for (const auto& entry : node_map_) {
+        keys.push_back(entry.first);
+    }
+
+    std::sort(keys.begin(), keys.end());
+
+    for (const std::string& key : keys) {
+        const Node& node = node_map_.at(key);
+        std::array<double, 2> avg = node.get_average_strategy();
+        std::cout << key
+                 << "-> ["
+                 << avg[0]
+                 << ", "
+                 << avg[1]
+                 << "]\n";
+    }
 }
 
 }

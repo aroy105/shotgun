@@ -18,6 +18,7 @@ FetchContent_MakeAvailable(Catch2)
 add_executable(shotgun
     src/main.cpp
     src/kuhn.cpp
+    src/cfr.cpp
 )
 
 target_include_directories(shotgun PRIVATE include)
