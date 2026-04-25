@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_approx.hpp>
 
 #include "kuhn.hpp"
 
@@ -201,4 +202,34 @@ TEST_CASE("infoset_key function returns correct value") {
     REQUIRE(infoset_key(State{Card::J, Card::Q, ""}) == "J|");
     REQUIRE(infoset_key(State{Card::Q, Card::J, "c"}) == "J|c");
     REQUIRE(infoset_key(State{Card::K, Card::Q, "cb"}) == "K|cb");
+}
+
+TEST_CASE("get_strategy normalizes positive regrets") {
+    shotgun::kuhn::Node node;
+    node.regret_sum = {3.0, 1.0};
+
+    auto strategy = node.get_strategy();
+
+    REQUIRE(strategy[0] == Catch::Approx(0.75));
+    REQUIRE(strategy[1] == Catch::Approx(0.25));
+}
+
+TEST_CASE("get_strategy returns uniform when regrets are nonpositive") {
+    shotgun::kuhn::Node node;
+    node.regret_sum = {-2.0, -0.5};
+
+    auto strategy = node.get_strategy();
+
+    REQUIRE(strategy[0] == Catch::Approx(0.5));
+    REQUIRE(strategy[1] == Catch::Approx(0.5));
+}
+
+TEST_CASE("get_average_strategy normalizes strategy sums") {
+    shotgun::kuhn::Node node;
+    node.strategy_sum = {2.0, 6.0};
+
+    auto avg = node.get_average_strategy();
+
+    REQUIRE(avg[0] == Catch::Approx(0.25));
+    REQUIRE(avg[1] == Catch::Approx(0.75));
 }
