@@ -73,7 +73,19 @@ double CFRTrainer::cfr(const State& state, double p1_reach, double p2_reach) {
 }
 
 void CFRTrainer::train(int iterations) {
+        std::vector<Card> cards{Card::J, Card::Q, Card::K};
 
+        for (int iter = 0; iter < iterations; iter++) {
+            for (Card p1_card : cards) {
+                for (Card p2_card : cards) {
+                    if (p1_card == p2_card) {
+                        continue;
+                    }
+                    State root{p1_card, p2_card, ""};
+                    cfr(root, 1.0, 1.0);
+                }
+            }
+        }
 }
 
 }
