@@ -5,10 +5,12 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
 
+#include "cfr.hpp"
 #include "kuhn.hpp"
 
 using shotgun::kuhn::Action;
 using shotgun::kuhn::Card;
+using shotgun::kuhn::CFRTrainer;
 using shotgun::kuhn::State;
 using shotgun::kuhn::current_player;
 using shotgun::kuhn::is_terminal;
@@ -232,4 +234,44 @@ TEST_CASE("get_average_strategy normalizes strategy sums") {
 
     REQUIRE(avg[0] == Catch::Approx(0.25));
     REQUIRE(avg[1] == Catch::Approx(0.75));
+}
+
+TEST_CASE("CFR average strategy approaches Kuhn Poker equilibrium family") {
+    CFRTrainer trainer;
+
+    trainer.train(10000);
+
+    auto j_root = trainer.average_strategy("J|");
+    auto q_root = trainer.average_strategy("Q|");
+    auto k_root = trainer.average_strategy("K|");
+    auto j_after_check = trainer.average_strategy("J|c");
+    auto q_after_check = trainer.average_strategy("Q|c");
+    auto k_after_check = trainer.average_strategy("K|c");
+    auto j_facing_bet = trainer.average_strategy("J|b");
+    auto q_facing_bet = trainer.average_strategy("Q|b");
+    auto k_facing_bet = trainer.average_strategy("K|b");
+    auto j_check_bet = trainer.average_strategy("J|cb");
+    auto q_check_bet = trainer.average_strategy("Q|cb");
+    auto k_check_bet = trainer.average_strategy("K|cb");
+
+    double alpha = j_root[1];
+
+    REQUIRE(alpha >= 0.0);
+    REQUIRE(alpha <= (1.0 / 3.0) + 0.01);
+    REQUIRE(q_root[1] == Catch::Approx(0.0).margin(0.01));
+    REQUIRE(k_root[1] == Catch::Approx(3.0 * alpha).margin(0.04));
+
+    REQUIRE(j_after_check[1] == Catch::Approx(1.0 / 3.0).margin(0.03));
+    REQUIRE(q_after_check[1] == Catch::Approx(0.0).margin(0.01));
+    REQUIRE(k_after_check[1] == Catch::Approx(1.0).margin(0.01));
+
+    REQUIRE(j_facing_bet[0] == Catch::Approx(0.0).margin(0.01));
+    REQUIRE(q_facing_bet[0] == Catch::Approx(1.0 / 3.0).margin(0.03));
+    REQUIRE(k_facing_bet[0] == Catch::Approx(1.0).margin(0.01));
+
+    REQUIRE(j_check_bet[0] == Catch::Approx(0.0).margin(0.01));
+    REQUIRE(q_check_bet[0] == Catch::Approx(alpha + (1.0 / 3.0)).margin(0.04));
+    REQUIRE(k_check_bet[0] == Catch::Approx(1.0).margin(0.01));
+
+    REQUIRE(trainer.expected_value() == Catch::Approx(-1.0 / 18.0).margin(0.01));
 }
