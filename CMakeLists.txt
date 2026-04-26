@@ -26,6 +26,7 @@ target_include_directories(shotgun PRIVATE include)
 add_executable(shotgun_tests
     tests/test_kuhn.cpp
     src/kuhn.cpp
+    src/cfr.cpp
 )
 
 target_include_directories(shotgun_tests PRIVATE include)
